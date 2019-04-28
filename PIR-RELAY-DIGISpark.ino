@@ -52,16 +52,16 @@ void loop() {
   {
     if (PIRstate == HIGH)                           // и есть движение
     {
-      movetime = millis();                          // сохраняем время движения
+      movetime = millis();                          // сохраняем текущее время движения
       if((movetime > (lastmove+10000))&&(delayTime < delayTimeMAX))
       { 
         delayTime = delayTime + delayTimeMIN;
       };
-      lastmove = movetime;                          // сохраняем время движения
+      lastmove = movetime;                          // сохраняем время последнего движения
       if(!LEDisON)                                  // если лампочка не горит
       {
         digitalWrite(BUILDIN_LED,HIGH);             // включаем лампочку
-        LEDisON = true;                             // запоминаем состоянии дампочки
+        LEDisON = true;                             // запоминаем состоянии лампочки
       };
     } else                                          // если движения нет
     if (LEDisON)                                    // а лампочка горит
