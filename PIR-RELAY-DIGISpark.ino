@@ -2,6 +2,11 @@
 #define PIN_PIR_SENSOR 0
 #define BUILDIN_LED 1
 
+#define delayTimeMIN 30000
+#define delayTimeMAX 150000
+#define lightSensorMIN 100
+
+
 boolean LightSensorON = false;
 boolean isDark = true;
 boolean LEDisON = false;
@@ -10,10 +15,6 @@ unsigned int PIRstate = LOW;
 unsigned int delayTime = 30000;
 unsigned long movetime = 0;
 unsigned long lastmove = 0;
-const unsigned int delayTimeMIN = 30000;
-const unsigned int delayTimeMAX = 150000;
-const unsigned int lightSensorMIN = 100;
-//const unsigned int lightSensorOFF = 10;
 
 void setup() {
 
@@ -42,13 +43,7 @@ void loop() {
 
   PIRstate = digitalRead(PIN_PIR_SENSOR);
     
-//    if((val>=lightSensorMIN) && (myLED==LOW)) {
-//      delay(100);
-//      return;
-//    };
-//  };
-
-  if (PIRstate == HIGH) 
+  if (PIRstate == HIGH)                             // если зарегистрировано движение
     movetime = millis();                            // сохраняем текущее время движения
   
   if (isDark)                                       // ТЕМНО
