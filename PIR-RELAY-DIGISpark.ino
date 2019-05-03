@@ -48,21 +48,23 @@ void loop() {
 //    };
 //  };
 
+  if (PIRstate == HIGH) 
+    movetime = millis();                            // сохраняем текущее время движения
+  
   if (isDark)                                       // ТЕМНО
   {
     if (PIRstate == HIGH)                           // и есть движение
     {
-      movetime = millis();                          // сохраняем текущее время движения
-      if((movetime > (lastmove+10000))&&(delayTime < delayTimeMAX))
-      { 
-        delayTime = delayTime + delayTimeMIN;
-      };
-      lastmove = movetime;                          // сохраняем время последнего движения
-      if(!LEDisON)                                  // если лампочка не горит
+      if(!LEDisON)                                  // а лампочка не горит
       {
         digitalWrite(BUILDIN_LED,HIGH);             // включаем лампочку
         LEDisON = true;                             // запоминаем состоянии лампочки
+        lastmove = movetime;                        // сохраняем время последнего движения
+      } else                                        
+      {                                             // иначе если лампочка уже горит
+        FreshTimer();                               // Обновляем значение таймера горения лампочки
       };
+      
     } else                                          // если движения нет
     if (LEDisON)                                    // а лампочка горит
     {
@@ -71,8 +73,13 @@ void loop() {
   } 
   
   else                                              // СВЕТЛО
-    if ((PIRstate==LOW) && LEDisON)                 // движения нет, но лампочка горит
+    if (LEDisON)                                    // и лампочка горит
     {
+      if (PIRstate == HIGH)                         // и есть движение
+      {
+        FreshTimer();                               // Обновляем значение таймера горения лампочки
+        
+      } else                                        // и нет движения
       TurnLEDbyTimer();                             // выключаем лампочку если закончилось время
     };
   
@@ -125,4 +132,13 @@ void TurnLEDbyTimer()
       delayTime = delayTimeMIN;                     // время горения возвращаем к изначальному значению
       LEDisON = false;                              // запоминаем состояние лампочки      
     };
+};
+
+void FreshTimer()
+{
+  if((movetime > (lastmove+10000))&&(delayTime < delayTimeMAX))
+      { 
+        delayTime = delayTime + delayTimeMIN;
+      };
+  lastmove = movetime;                              // сохраняем время последнего движения
 };
